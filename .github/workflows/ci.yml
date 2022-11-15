@@ -19,6 +19,10 @@ jobs:
             perl: '5.36'
           - runner: windows-latest
             perl: '5.10'
+          - runner: macos-latest
+            perl: '5.36'
+          - runner: macos-latest
+            perl: '5.10'
 
     runs-on: ${{matrix.runner}}
     name: OS ${{matrix.runner}} Perl ${{matrix.perl}}
