@@ -17,6 +17,8 @@ jobs:
         exclude:
           - runner: windows-latest
             perl: '5.36'
+          - runner: windows-latest
+            perl: '5.10'
 
     runs-on: ${{matrix.runner}}
     name: OS ${{matrix.runner}} Perl ${{matrix.perl}}
@@ -61,5 +63,5 @@ jobs:
         AUTHOR_TESTING: 1
         RELEASE_TESTING: 1
       run: |
-        prove
+        prove -v
 
