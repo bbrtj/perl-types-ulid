@@ -5,7 +5,7 @@ on:
   pull_request:
   workflow_dispatch:
   schedule:
-    - cron: '42 5 * * *'
+    - cron: '42 5 * * 0'
 
 jobs:
   test:
@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         runner: [ubuntu-latest, macos-latest, windows-latest]
-        perl: [ '5.30', '5.36' ]
+        perl: [ '5.10', '5.30', '5.36' ]
         exclude:
           - runner: windows-latest
             perl: '5.36'
@@ -34,15 +34,10 @@ jobs:
       run: |
         perl -v
 
-    - name: Install Dist::Zilla
-      run: |
-        cpanm -v
-        cpanm --notest Dist::Zilla
-
     - name: Install Modules
       run: |
-        dzil authordeps --missing | cpanm --notest
-        dzil listdeps --develop --missing | cpanm --notest
+        cpanm -v
+        cpanm --installdeps .
 
     - name: Show Errors on Windows
       if:  ${{ failure() && startsWith( matrix.runner, 'windows-')}}
@@ -66,5 +61,5 @@ jobs:
         AUTHOR_TESTING: 1
         RELEASE_TESTING: 1
       run: |
-        dzil test
+        prove
 
