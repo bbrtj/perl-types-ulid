@@ -6,6 +6,8 @@ use Test::More;
 use Types::ULID qw(is_ULID to_ULID is_BinaryULID to_BinaryULID);
 use Data::ULID qw(ulid binary_ulid);
 
+diag 'XS status: ' . (Types::ULID::HAS_XS ? 'yes' : 'no');
+
 subtest 'testing ULID' => sub {
 	ok is_ULID('00000000010000000000000001'), 'small ulid ok';
 	ok is_ULID('01B3Z3A7GQ6627FZPDQHQP87PM'), 'old ulid ok';

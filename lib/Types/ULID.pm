@@ -9,6 +9,8 @@ use Types::Standard qw(Undef);
 use Types::Common::String qw(StrLength);
 use Data::ULID;
 
+use constant HAS_XS => eval { require Data::ULID::XS; 1; };
+
 my $tr_alphabet = '0-9a-hjkmnp-tv-zA-HJKMNP-TV-Z';
 my $ULID = Type::Tiny->new(
 	name => 'ULID',
@@ -20,7 +22,7 @@ my $ULID = Type::Tiny->new(
 	},
 
 	coercion => [
-		Undef, q{ Data::ULID::ulid() },
+		Undef, HAS_XS ? q{ Data::ULID::XS::ulid() } : q{ Data::ULID::ulid() },
 	],
 );
 
@@ -29,7 +31,7 @@ my $BinaryULID = Type::Tiny->new(
 	parent => StrLength[16, 16],
 
 	coercion => [
-		Undef, q{ Data::ULID::binary_ulid() },
+		Undef, HAS_XS ? q{ Data::ULID::XS::binary_ulid() } : q{ Data::ULID::binary_ulid() },
 	],
 );
 
@@ -73,9 +75,16 @@ Type for binary ulid. Can be coerced from C<undef> - generates a new ulid.
 
 TODO: this does not currently check whether string contains multibyte characters.
 
+=head2 ULID implementation
+
+Coercions provided by this module will use L<Data::ULID::XS> to generate new
+ULIDs if it is available.
+
 =head1 SEE ALSO
 
 L<Data::ULID>
+
+L<Data::ULID::XS>
 
 L<Type::Tiny>
 
