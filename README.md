@@ -1,5 +1,5 @@
 # Types::ULID
-Type::Tiny types for ulid with Data::ULID.
+Type::Tiny types for [ulid](https://github.com/ulid/spec).
 
 ## Code and documentation
 [Types::ULID on CPAN](https://metacpan.org/release/Types-ULID)

@@ -1,3 +1,6 @@
+0.003 Dec 3 2022
+	- Use Data::ULID::XS if it is available
+
 0.002 Nov 13 2022
 	- upgrade minimum version of Type::Tiny
 	- move dependencies to a cpanfile
