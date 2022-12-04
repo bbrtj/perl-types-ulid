@@ -1,3 +1,7 @@
+0.004 Dec 4 2022
+	- add Types::ULID::ulid and Types::ULID::binary_ulid functions from the found backend
+	- add Types::ULID::ULID_BACKEND constant with the found backend package name
+
 0.003 Dec 3 2022
 	- Use Data::ULID::XS if it is available
 
