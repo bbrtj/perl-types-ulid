@@ -7,9 +7,16 @@ use warnings;
 use Type::Library -base;
 use Types::Standard qw(Undef);
 use Types::Common::String qw(StrLength);
-use Data::ULID;
 
-use constant HAS_XS => eval { require Data::ULID::XS; 1; };
+BEGIN {
+	my $has_xs = eval { require Data::ULID::XS; 1; };
+	my $backend = $has_xs ? 'Data::ULID::XS' : 'Data::ULID';
+
+	eval "require $backend";
+	$backend->import(qw(ulid binary_ulid));
+
+	sub ULID_BACKEND () { $backend }
+}
 
 my $tr_alphabet = '0-9a-hjkmnp-tv-zA-HJKMNP-TV-Z';
 my $ULID = Type::Tiny->new(
@@ -22,7 +29,7 @@ my $ULID = Type::Tiny->new(
 	},
 
 	coercion => [
-		Undef, HAS_XS ? q{ Data::ULID::XS::ulid() } : q{ Data::ULID::ulid() },
+		Undef, q{ Types::ULID::ulid() },
 	],
 );
 
@@ -31,7 +38,7 @@ my $BinaryULID = Type::Tiny->new(
 	parent => StrLength[16, 16],
 
 	coercion => [
-		Undef, HAS_XS ? q{ Data::ULID::XS::binary_ulid() } : q{ Data::ULID::binary_ulid() },
+		Undef, q{ Types::ULID::binary_ulid() },
 	],
 );
 
@@ -79,6 +86,18 @@ TODO: this does not currently check whether string contains multibyte characters
 
 Coercions provided by this module will use L<Data::ULID::XS> to generate new
 ULIDs if it is available.
+
+Following functions are compiled into the module from the ULID implementation it found:
+
+C<Types::ULID::ulid>
+
+C<Types::ULID::binary_ulid>
+
+Additionally, a constant can be queried for the current backend:
+
+C<Types::ULID::ULID_BACKEND>
+
+I<these functions require Types::ULID version> C<0.004>
 
 =head1 SEE ALSO
 
